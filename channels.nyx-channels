@@ -11,7 +11,7 @@
 # Versions compare as dotted numbers, and a `-suffix` sorts before its release, so 3.15.0-beta.1 is
 # older than 3.15.0. That is what makes Beta usable: a beta never replaces the release it precedes.
 
-channel Stable       3.14.0             "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0/nyx-3.14.0-windows-x86_64.tar.gz"  current release
-channel Beta         3.15.0-beta.1      "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.15.0-beta.1/nyx-3.15.0-beta.1-windows-x86_64.tar.gz"  features still moving; behaviour can change between builds
-channel TestEdition  3.16.0-test.1      "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.16.0-test.1/nyx-3.16.0-test.1-windows-x86_64.tar.gz"  the bleeding edge; published from a work-in-progress branch
-channel Preview      3.14.0             "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0/nyx-3.14.0-windows-x86_64.tar.gz"  published more often than Stable
+channel Stable       3.14.0             "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0/nyx-3.14.0-stable-windows-x86_64.tar.gz"  current release
+channel Beta         3.15.0-beta.1      "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.15.0-beta.1/nyx-3.15.0-beta.1-beta-windows-x86_64.tar.gz"  features still moving; behaviour can change between builds
+channel TestEdition  3.16.0-test.1      "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.16.0-test.1/nyx-3.16.0-test.1-testedition-windows-x86_64.tar.gz"  the bleeding edge; published from a work-in-progress branch
+channel Preview      3.14.0             "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0/nyx-3.14.0-preview-windows-x86_64.tar.gz"  published more often than Stable
