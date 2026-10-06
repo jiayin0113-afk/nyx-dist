@@ -1,32 +1,17 @@
-# The release channels of the Nyx toolchain.
+﻿# The release channels of the Nyx toolchain.
 #
-# `nyx upgrade` fetches this file from the distribution repository. One line per channel that is
-# actually published; a channel with no line is *not published yet*, which `nyx upgrade` reports as
-# such rather than as "up to date".
+# Written by tools/publish_channels.ps1, which verifies every archive by extracting and running it
+# before this file names it. A URL here is a URL that answered.
 #
 #     channel <name> <version> ["<archive URL>"] [notes]
 #
-# The four channels, from least to most adventurous:
+# A channel with no URL is published *by announcement only*: clients report that a release exists and
+# fetch nothing, which is the honest state of a channel whose build is not ready.
 #
-#   Stable        what most people should run.
-#   Preview       published more often than Stable, expected to work.
-#   Beta          features are still moving; behaviour can change between builds.
-#   TestEdition   the bleeding edge: may not build a program at all.
-#
-# The archive holds `bin/nyx` (or `bin/nyx.exe`) plus the toolchain's `lib/`, so an installation is a
-# directory rather than a bare executable — the standard library is Nyx source, and the compiler
-# resolves it from `lib/` at compile time. Omitting the URL publishes only the version: users are told
-# a release exists and nothing is fetched, which is the right shape for a channel whose builds are not
-# ready to hand out.
-#
-# Versions are compared as dotted numbers, and a `-suffix` sorts *before* its release, so
-# `3.14.0-beta.2` is older than `3.14.0`. That is what makes the Beta channel usable: a beta never
-# replaces the release it precedes.
-#
-# The archives are attached to GitHub Releases rather than committed here, so this repository stays
-# small enough to read in a browser.
+# Versions compare as dotted numbers, and a `-suffix` sorts before its release, so 3.15.0-beta.1 is
+# older than 3.15.0. That is what makes Beta usable: a beta never replaces the release it precedes.
 
-channel Stable      3.13.0  "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.13.0/nyx-3.13.0-windows-x86_64.tar.gz"  current release
-channel Preview     3.13.0  "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.13.0/nyx-3.13.0-windows-x86_64.tar.gz"  same build as Stable while Preview is being set up
-channel Beta        3.14.0-beta.2  "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0-beta.2/nyx-3.14.0-beta.2-windows-x86_64.tar.gz"  union types, macros, transitive package resolution
-channel TestEdition 3.15.0-test.1  ""  published, no archive yet: the branch is not building
+channel Stable       3.14.0             "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0/nyx-3.14.0-windows-x86_64.tar.gz"  current release
+channel Beta         3.15.0-beta.1      "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.15.0-beta.1/nyx-3.15.0-beta.1-windows-x86_64.tar.gz"  features still moving; behaviour can change between builds
+channel TestEdition  3.16.0-test.1      "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.16.0-test.1/nyx-3.16.0-test.1-windows-x86_64.tar.gz"  the bleeding edge; published from a work-in-progress branch
+channel Preview      3.14.0             "https://github.com/jiayin0113-afk/nyx-dist/releases/download/v3.14.0/nyx-3.14.0-windows-x86_64.tar.gz"  published more often than Stable
