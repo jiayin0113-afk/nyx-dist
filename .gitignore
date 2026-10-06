@@ -1,2 +1,6 @@
+# A private key container is never part of the distribution. It is listed here as well as being kept
+# outside the repository, so that a careless `git add -A` cannot publish a signing key.
+ncsPMF.NCS
+*.NCS
+trusted.nps
 *.tmp
-
