@@ -1,0 +1,12 @@
+# Nyx.Http — a third-party package with a dependency of its own.
+#
+# This manifest is what makes the resolver transitive. A toolchain that only read the top-level
+# manifest would fetch Nyx.Http and stop; reading *this* file is what brings Nyx.Json into the graph.
+#
+# The source is a relative path, resolved against this package's own directory — a package's
+# dependencies are its own business, and a manifest that named an absolute path would only work on
+# the machine that wrote it.
+
+package Nyx.Http
+version 2.1.0
+dependency Nyx.Json 1.0.0 "../Nyx.Json"

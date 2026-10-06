@@ -1,0 +1,116 @@
+// Nyx.Json — an official extension package, published in the distribution repository.
+//
+// It is listed as `official` in `registry.nyx-registry`, which only means the language project
+// publishes it: it goes through exactly the same fetch, unpack, checksum and module-resolution path as
+// a third-party package, and nothing in the toolchain treats the flag as anything but a label for the
+// reader.
+//
+// A package is a directory of modules plus a manifest. This one's sources live under their module path,
+// so `Nyx.Json.Parser` is this file, and `import Nyx.Json.Parser.parseInteger` finds it the same way
+// `import Nyx.Core.Text.trimmedText` finds the standard library.
+//
+// Two things are deliberately absent, because the language does not have them:
+//
+//   * **string methods.** There is no `text.length()`. The standard library is a set of free functions
+//     (`textLengthOf`, `textStartsWithText`), and a package uses them the way any program does.
+//   * **arithmetic on a character.** A `Char` is not an `Int` here, so a digit is converted by naming
+//     it. `digitValueOf` below is that conversion, and it is a `match` rather than `c - '0'`.
+
+import Nyx.Core.Text.trimmedText();
+import Nyx.Core.Text.textLengthOf();
+import Nyx.Core.Text.substringOfText();
+import Nyx.Core.Text.textStartsWithText();
+
+/// The numeric value of a digit character, or -1 when the character is not a decimal digit.
+///
+/// A `match` over the characters rather than `characterValue - '0'`: this language does not add a
+/// `Char` to anything, and the subtraction would be a type error rather than a shortcut.
+function digitValueOf(characterValue: Char) -> Int {
+    match characterValue {
+        '0' => return 0;
+        '1' => return 1;
+        '2' => return 2;
+        '3' => return 3;
+        '4' => return 4;
+        '5' => return 5;
+        '6' => return 6;
+        '7' => return 7;
+        '8' => return 8;
+        '9' => return 9;
+        _ => return 0 - 1;
+    }
+}
+
+/// Reads an integer out of text that may have surrounding whitespace or a leading minus sign.
+///
+/// A non-digit character stops the parse, and the value so far is returned. That is the rule a
+/// hand-written parser usually wants (it is how a version header is read), and it is stated here
+/// because the alternative — refusing the input — is a different function.
+function parseInteger(stringTextToParse: String) -> Int {
+    var stringTrimmedValue = trimmedText(stringTextToParse);
+    var booleanNegativeValue = false;
+    if textStartsWithText(stringTrimmedValue, "-") {
+        booleanNegativeValue = true;
+        stringTrimmedValue = substringOfText(stringTrimmedValue, 1, textLengthOf(stringTrimmedValue));
+    }
+    var integerAccumulatedValue = 0;
+    for characterValue in stringTrimmedValue {
+        var integerDigitValue = digitValueOf(characterValue);
+        if integerDigitValue < 0 {
+            if booleanNegativeValue {
+                return 0 - integerAccumulatedValue;
+            }
+            return integerAccumulatedValue;
+        }
+        integerAccumulatedValue = integerAccumulatedValue * 10 + integerDigitValue;
+    }
+    if booleanNegativeValue {
+        return 0 - integerAccumulatedValue;
+    }
+    return integerAccumulatedValue;
+}
+
+/// The text after the first occurrence of a separator, or the whole text when it does not appear.
+///
+/// Used by `Nyx.Http`, which is how a package's own dependency is exercised rather than merely
+/// declared.
+function textAfterSeparator(stringTextToSearch: String, stringSeparatorText: String) -> String {
+    var integerIndexValue = indexOfSeparator(stringTextToSearch, stringSeparatorText);
+    if integerIndexValue < 0 {
+        return stringTextToSearch;
+    }
+    return substringOfText(
+        stringTextToSearch,
+        integerIndexValue + textLengthOf(stringSeparatorText),
+        textLengthOf(stringTextToSearch)
+    );
+}
+
+/// The index of a separator, or -1. Written here rather than imported so the package has a function
+/// that is unambiguously its own.
+function indexOfSeparator(stringTextToSearch: String, stringSeparatorText: String) -> Int {
+    var integerPositionValue = 0;
+    var integerLimitValue = textLengthOf(stringTextToSearch) - textLengthOf(stringSeparatorText);
+    while integerPositionValue <= integerLimitValue {
+        var stringSliceValue = substringOfText(
+            stringTextToSearch,
+            integerPositionValue,
+            integerPositionValue + textLengthOf(stringSeparatorText)
+        );
+        if stringSliceValue == stringSeparatorText {
+            return integerPositionValue;
+        }
+        integerPositionValue = integerPositionValue + 1;
+    }
+    return 0 - 1;
+}
+
+/// The package's own name, so a program can assert which package answered.
+function packageName() -> String {
+    return "Nyx.Json";
+}
+
+/// The published version, so a program can assert which release was fetched.
+function packageVersion() -> String {
+    return "1.0.0";
+}

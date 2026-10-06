@@ -1,0 +1,7 @@
+# Nyx.Json, published by the language project.
+#
+# Every fetched package carries its own manifest, because the resolver reads it to find what that
+# package depends on. This one depends on nothing, which is what makes it a leaf of the graph.
+
+package Nyx.Json
+version 1.0.0

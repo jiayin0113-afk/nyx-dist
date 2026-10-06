@@ -1,0 +1,22 @@
+# The Nyx package index.
+#
+# `nyx resolve` reads this when a manifest declares a dependency by name alone, and `nyx update`
+# fetches everything in it. It lives in the same repository as the release channels, so there is one
+# place to look for "what the Nyx project publishes" — the toolchain, its official extensions, and
+# third-party packages alike.
+#
+#     package <name> <version> [official] "<archive URL>" [description]
+#
+# * One line per published **version**, so a package with three releases has three lines and the
+#   newest one wins for a by-name dependency.
+# * `official` means the language project publishes it. It is a label for the reader: an official
+#   package is fetched, unpacked, checksummed and resolved by exactly the same code as any other.
+# * The archive is a `.tar.gz` whose entries are the package's files — a `nyx.package` and the module
+#   tree under it. `nyx resolve` unpacks it into `deps/<name>/` and treats that directory as a module
+#   search root.
+#
+# Adding a package is a pull request that adds one line here and one directory under `packages/`. No
+# service is involved and nothing has to be registered: the index *is* the registry.
+
+package Nyx.Json 1.0.0 official "https://raw.githubusercontent.com/jiayin0113-afk/nyx-dist/main/packages/Nyx.Json-1.0.0.tar.gz" digit parsing, text splits, package identity
+package Nyx.Http 2.1.0 "https://raw.githubusercontent.com/jiayin0113-afk/nyx-dist/main/packages/Nyx.Http-2.1.0.tar.gz" HTTP request lines, depends on Nyx.Json

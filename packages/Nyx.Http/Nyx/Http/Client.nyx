@@ -1,0 +1,45 @@
+// Nyx.Http — a third-party package, published in the same distribution repository as the official ones.
+//
+// It is deliberately *not* marked `official` in `registry.nyx-registry`, and it depends on another
+// package: `Nyx.Json`. So fetching it exercises two things a first-party leaf package cannot:
+//
+//   * the registry path for a package the language project does not publish, and
+//   * one more level of transitive resolution — `nyx resolve` fetches `Nyx.Http`, reads its manifest,
+//     fetches `Nyx.Json` because of what it read, and only then can a program that imports both build.
+//
+// It *uses* its dependency rather than merely declaring it, so a build that did not actually fetch
+// `Nyx.Json` fails with `undefined function` instead of appearing to work.
+
+import Nyx.Core.Text.textLengthOf();
+import Nyx.Core.Text.substringOfText();
+import Nyx.Core.Text.textIndexInText();
+import Nyx.Json.Parser.parseInteger();
+import Nyx.Json.Parser.textAfterSeparator();
+import Nyx.Json.Parser.packageName();
+
+/// The method of a request line, and which package answered.
+///
+/// The result names `Nyx.Json` because that text comes from the dependency's own `packageName`: a build
+/// that skipped the transitive fetch cannot produce this string.
+function parseRequestLine(stringRequestLine: String) -> String {
+    var integerFirstSpaceValue = textIndexInText(stringRequestLine, " ");
+    var stringMethodValue = substringOfText(stringRequestLine, 0, integerFirstSpaceValue);
+    return stringMethodValue + " via " + packageName();
+}
+
+/// The port from a request line, read by the dependency's integer parser.
+function portFromRequestLine(stringRequestLine: String) -> Int {
+    var stringPortTextValue = textAfterSeparator(stringRequestLine, ":");
+    return parseInteger(stringPortTextValue);
+}
+
+/// The path of a request line, so the package has a use for its own code as well as the dependency's.
+function pathFromRequestLine(stringRequestLine: String) -> String {
+    var integerFirstSpaceValue = textIndexInText(stringRequestLine, " ");
+    return substringOfText(stringRequestLine, integerFirstSpaceValue + 1, textLengthOf(stringRequestLine));
+}
+
+/// The package's own name, so a program can assert which package answered.
+function packageName() -> String {
+    return "Nyx.Http";
+}
